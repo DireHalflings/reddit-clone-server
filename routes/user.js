@@ -1,6 +1,11 @@
 const router = require("express").Router();
 
 const {
+    validateUser,
+    encryptUserPassword,
+} = require("../controllers/authController");
+
+const {
     seedUserData,
     getUsers,
     getUserById,
@@ -19,7 +24,7 @@ router.get("/", getUsers);
 router.get("/:id", getUserById);
 
 // /user/add
-router.post("/add", createUser);
+router.post("/add", validateUser, encryptUserPassword, createUser);
 
 // /user/update
 router.put("/update/:id", updateUser);
