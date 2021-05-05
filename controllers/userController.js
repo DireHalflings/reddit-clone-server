@@ -11,7 +11,7 @@ const seedUserData = (req, res) => {
 };
 
 //create
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
     let user = req.body;
     User.create(user)
         .then((user) => res.status(200).json(user))
@@ -33,7 +33,7 @@ const getUsers = (req, res) => {
     });
 };
 
-getUserById = (req, res) => {
+const getUserById = (req, res) => {
     User.findById(req.params.id).exec((err, user) => {
         if (!user)
             return res

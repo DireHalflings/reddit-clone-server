@@ -44,7 +44,6 @@ const getPostByUser = (req, res) => {
 //read by subReddit
 const getPostBySubReddit = (req, res) => {
     const subReddit = req.params.subReddit;
-    console.log(subReddit);
     Post.find({ subReddit: subReddit })
         .then((posts) => res.status(200).json(posts))
         .catch((err) => res.status(404).json({ message: "no post found" }));

@@ -18,7 +18,7 @@ router.get("/seed", SeedPostData);
 router.post("/add", createPost);
 
 // /post/posts
-router.get("/posts", getPost);
+router.get("/", getPost);
 
 // post/posts/u/:username
 router.get("/posts/u/:username", getPostByUser);
