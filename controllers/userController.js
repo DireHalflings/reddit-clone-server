@@ -1,11 +1,25 @@
+const bcrypt = require("bcrypt");
 const User = require("../model/User");
 const { userData } = require("../data/users");
 
 // console.log(userData);
 
 //crud = create, read, update, delete
-const seedUserData = (req, res) => {
-    User.create(userData)
+const seedUserData = async (req, res) => {
+    const hashedUsers = [];
+    // encrypt passwords
+    const rounds = 10;
+
+    for (let i = 0; i < userData.length; i++) {
+        const salt = await bcrypt.genSalt(rounds);
+        const hashPass = await bcrypt.hash(userData[i].password, salt);
+        hashedUsers.push({ ...userData[i], password: hashPass });
+    }
+    // const hashedUserData = userData.map(user =>{
+    //     return (...user, password.)
+    // })
+
+    User.create(hashedUsers)
         .then((user) => res.status(200).json({ user }))
         .catch((err) => res.status(500).json({ Error: err }));
 };
