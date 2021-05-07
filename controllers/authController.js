@@ -21,4 +21,20 @@ const encryptUserPassword = async (req, res, next) => {
     next();
 };
 
-module.exports = { validateUser, encryptUserPassword };
+const loginUser = async (req, res, next) => {
+    let userEmail = req.body.email.toLowerCase();
+    let pass = req.body.password;
+    let match = false;
+    await User.findOne({ email: userEmail }).then((user) => {
+        if (!user) return res.status(404).send({ message: "ACCESS DENIED" });
+        match = bcrypt.compareSync(pass, user.password);
+        if (match) {
+            req.user = user;
+            return next();
+        } else {
+            res.status(401).send({ message: "ACCESS DENIED" });
+        }
+    });
+};
+
+module.exports = { validateUser, encryptUserPassword, loginUser };
