@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 
 const validateUser = async (req, res, next) => {
     //unique email check
@@ -37,4 +38,22 @@ const loginUser = async (req, res, next) => {
     });
 };
 
-module.exports = { validateUser, encryptUserPassword, loginUser };
+const issueToken = (req, res) => {
+    const token = jwt.sign({ _id: req.user._id }, process.env.TOKEN_SECRET);
+    res.header('auth-token', token).send(token);
+}
+
+const verifyToken = (req, res, next) => {
+    const token = req.header('auth-token');
+    if (!token) return res.status(401).send('Access Denied.');
+
+    try {
+        const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+        // req.user.verified = verified;
+        next();
+    } catch(err) {
+        res.status(400).send(`Invalid Token: ${ err }`);
+    }
+}
+
+module.exports = { validateUser, encryptUserPassword, loginUser, issueToken, verifyToken };

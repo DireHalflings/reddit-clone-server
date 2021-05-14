@@ -21,13 +21,13 @@ router.post("/add", createPost);
 router.get("/", getPost);
 
 // post/posts/u/:username
-router.get("/posts/u/:username", getPostByUser);
+router.get("/u/:username", getPostByUser);
 
 // post/posts/r/:subReddit
-router.get("/posts/r/:subReddit", getPostBySubReddit);
+router.get("/r/:subReddit", getPostBySubReddit);
 
 // /post/posts/:id
-router.get("/posts/:id", getPostById);
+router.get("/:id", getPostById);
 
 // /post/update/:id
 router.put("/update/:id", updatePost);
