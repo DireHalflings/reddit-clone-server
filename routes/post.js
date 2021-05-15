@@ -9,13 +9,15 @@ const {
     deletePost,
     getPostByUser,
     getPostBySubReddit,
+    votePost,
 } = require("../controllers/postController.js");
 
+const { getUserFromToken } = require("../controllers/userController");
 // /post/seed
 router.get("/seed", SeedPostData);
 
 // /post/add
-router.post("/add", createPost);
+router.post("/add", getUserFromToken, createPost);
 
 // /post/posts
 router.get("/", getPost);
@@ -34,5 +36,7 @@ router.put("/update/:id", updatePost);
 
 // /post/delete/:id
 router.delete("/delete/:id", deletePost);
+
+router.put("/vote", getUserFromToken, votePost);
 
 module.exports = router;

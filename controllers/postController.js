@@ -81,6 +81,18 @@ const updatePost = (req, res) => {
     );
 };
 
+const votePost = (req, res) => {
+    const postId = req.postId;
+    const vote = req.vote;
+    const userId = req.id;
+    let curPost;
+
+    Post.findById(postId).then((post) => {
+        curPost = post;
+    });
+    if (!curPost) res.status(404).send("Post not found.");
+};
+
 //delete
 const deletePost = (req, res) => {
     const id = req.params.id;
@@ -102,4 +114,5 @@ module.exports = {
     deletePost,
     getPostByUser,
     getPostBySubReddit,
+    votePost,
 };

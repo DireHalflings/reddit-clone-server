@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../model/User");
+const jwt = require("jsonwebtoken");
 const { userData } = require("../data/users");
 
 // console.log(userData);
@@ -25,10 +26,14 @@ const seedUserData = async (req, res) => {
 };
 
 //create
-const createUser = async (req, res) => {
+const createUser = (req, res, next) => {
     let user = req.body;
     User.create(user)
-        .then((user) => res.status(200).json(user))
+        .then((u) => {
+            console.log(u);
+            req.user = u;
+            next();
+        })
         .catch((err) => res.status(500).json({ Error: err.message }));
 };
 
@@ -88,6 +93,24 @@ const deleteUser = (req, res) => {
     });
 };
 
+const getUserFromToken = (req, res, next) => {
+    const token = req.body.token;
+    let decoded;
+
+    try {
+        decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+    } catch (err) {
+        return res.status(401).send("Access Denied.");
+    }
+
+    const userId = decoded._id;
+    User.findOne({ _id: userId }).then((user) => {
+        req.body.username = user.name;
+        req.body.id = user._id;
+        next();
+    });
+};
+
 module.exports = {
     seedUserData,
     getUsers,
@@ -95,4 +118,5 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
+    getUserFromToken,
 };
