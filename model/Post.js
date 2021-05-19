@@ -25,7 +25,7 @@ const PostSchema = new Schema({
         required: true,
     },
     votes: {
-        type: Number,
+        type: Array,
         required: true,
     },
     comments: {
