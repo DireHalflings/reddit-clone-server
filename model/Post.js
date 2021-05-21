@@ -14,7 +14,7 @@ const PostSchema = new Schema({
     username: {
         type: String,
         required: true,
-        lowercase: true
+        lowercase: true,
     },
     subReddit: {
         type: String,
@@ -25,7 +25,7 @@ const PostSchema = new Schema({
         required: true,
     },
     votes: {
-        type: Number,
+        type: Array,
         required: true,
     },
     comments: {

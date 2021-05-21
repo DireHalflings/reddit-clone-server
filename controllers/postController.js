@@ -82,15 +82,48 @@ const updatePost = (req, res) => {
 };
 
 const votePost = (req, res) => {
-    const postId = req.postId;
-    const vote = req.vote;
-    const userId = req.id;
+    const postId = req.body.postId;
+    const vote = req.body.vote;
+    const userId = req.body.id;
     let curPost;
 
-    Post.findById(postId).then((post) => {
-        curPost = post;
+    if (vote > 1 || vote < -1)
+        return res.status(500).send({ message: "Too many votes on package" });
+
+    if (!postId || !vote || !userId)
+        return res.status(500).send({ message: "malformed vote request." });
+
+    Post.findById(postId).then((post, err) => {
+        if (err) return res.status(500).send({ message: err });
+        User.findById(userId).then((user, err) => {
+            if (err) return res.status(500).send({ message: err });
+            const tempVotes = post.votes;
+            const userIdVotes = tempVotes.map((vote) => vote.userId);
+
+            if (userIdVotes.includes(userId)) {
+                tempVotes[userIdVotes.indexOf(userId)].vote = vote;
+                Post.findOneAndUpdate(
+                    { _id: postId },
+                    { votes: tempVotes }
+                ).then((user) => {
+                    if (err) return res.status(500).send({ message: err });
+                });
+                return res.send(200).send({});
+            }
+            tempVotes.push({ userId: userId, vote: vote });
+            const tempUser = {
+                ...user,
+                votes: tempVotes,
+            };
+
+            Post.findOneAndUpdate({ _id: postId }, { votes: tempVotes }).then(
+                (user) => {
+                    if (err) return res.status(500).send({ message: err });
+                }
+            );
+            return res.status(200).send({});
+        });
     });
-    if (!curPost) res.status(404).send("Post not found.");
 };
 
 //delete
