@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const {
     validateUser,
-    encryptUserPassword,
+    encryptUserPassword
 } = require("../controllers/authController");
 
 const {
