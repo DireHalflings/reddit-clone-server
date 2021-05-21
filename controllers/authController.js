@@ -47,11 +47,15 @@ const issueToken = (req, res) => {
 
 const verifyToken = (req, res, next) => {
     const token = req.header("auth-token");
+    console.log(req.body)
     if (!token) return res.status(401).send("Access Denied.");
+    // console.log(req);
 
     try {
+        console.log(token);
         const verified = jwt.verify(token, process.env.TOKEN_SECRET);
         // req.user.verified = verified;
+        req.body.token = token;
         next();
     } catch (err) {
         res.status(400).send(`Invalid Token: ${err}`);

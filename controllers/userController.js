@@ -96,11 +96,10 @@ const deleteUser = (req, res) => {
 const getUserFromToken = (req, res, next) => {
     const token = req.body.token;
     let decoded;
-
     try {
         decoded = jwt.verify(token, process.env.TOKEN_SECRET);
     } catch (err) {
-        return res.status(401).send("Access Denied.");
+        return res.status(401).send("Access Denied." + err);
     }
 
     const userId = decoded._id;

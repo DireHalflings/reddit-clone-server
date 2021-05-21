@@ -10,10 +10,11 @@ const {
     getPostByUser,
     getPostBySubReddit,
     votePost,
+    commentPost
 } = require("../controllers/postController.js");
 
 const { getUserFromToken } = require("../controllers/userController");
-// /post/seed
+// /posts/seed
 router.get("/seed", SeedPostData);
 
 // /post/add
@@ -37,6 +38,10 @@ router.put("/update/:id", updatePost);
 // /post/delete/:id
 router.delete("/delete/:id", deletePost);
 
+// /post/
 router.put("/vote", getUserFromToken, votePost);
+
+// /post/
+router.put("/comment", getUserFromToken, commentPost);
 
 module.exports = router;

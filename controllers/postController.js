@@ -87,19 +87,25 @@ const votePost = (req, res) => {
     const userId = req.body.id;
     let curPost;
 
+    // vote validation
     if (vote > 1 || vote < -1)
         return res.status(500).send({ message: "Too many votes on package" });
 
+    // vote, user, post validation
     if (!postId || !vote || !userId)
         return res.status(500).send({ message: "malformed vote request." });
 
+    // find post by Id
     Post.findById(postId).then((post, err) => {
         if (err) return res.status(500).send({ message: err });
+
+        // find user by Id
         User.findById(userId).then((user, err) => {
             if (err) return res.status(500).send({ message: err });
             const tempVotes = post.votes;
             const userIdVotes = tempVotes.map((vote) => vote.userId);
 
+            // vote update
             if (userIdVotes.includes(userId)) {
                 tempVotes[userIdVotes.indexOf(userId)].vote = vote;
                 Post.findOneAndUpdate(
@@ -108,7 +114,7 @@ const votePost = (req, res) => {
                 ).then((user) => {
                     if (err) return res.status(500).send({ message: err });
                 });
-                return res.send(200).send({});
+                return res.status(200).send({});
             }
             tempVotes.push({ userId: userId, vote: vote });
             const tempUser = {
@@ -116,11 +122,44 @@ const votePost = (req, res) => {
                 votes: tempVotes,
             };
 
+            // update votes on post
             Post.findOneAndUpdate({ _id: postId }, { votes: tempVotes }).then(
                 (user) => {
                     if (err) return res.status(500).send({ message: err });
                 }
             );
+            return res.status(200).send({});
+        });
+    });
+};
+
+const commentPost = (req, res) => {
+    const postId = req.body.postId;
+    const comment = req.body.comment;
+    const userId = req.body.id;
+
+    // post, user, comment validation
+    if (!postId || !comment || !userId)
+        return res.status(500).send({ message: "malformed vote request." });
+    // find post by Id
+    Post.findById(postId).then((post, err) => {
+        if (err) return res.status(500).send({ message: err });
+
+        // find user by Id
+        User.findById(userId).then((user, err) => {
+            if (err) return res.status(500).send({ message: err });
+            const tempComment = post.comments;
+
+            // comment update
+            tempComment.push({ username: user.name, text: comment });
+
+            // update comment on post
+            Post.findOneAndUpdate(
+                { _id: postId },
+                { comments: tempComment }
+            ).then((user) => {
+                if (err) return res.status(500).send({ message: err });
+            });
             return res.status(200).send({});
         });
     });
@@ -148,4 +187,5 @@ module.exports = {
     getPostByUser,
     getPostBySubReddit,
     votePost,
+    commentPost,
 };
