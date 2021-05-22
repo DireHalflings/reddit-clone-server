@@ -12,7 +12,8 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+const corsOptions = { accessControlAllowOrigin: "*" };
+app.use(cors(corsOptions));
 const db = require("./config/database");
 app.use(express.static(path.join(__dirname, "client/build")));
 
