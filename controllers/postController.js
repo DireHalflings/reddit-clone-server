@@ -101,6 +101,7 @@ const votePost = (req, res) => {
 
         // find user by Id
         User.findById(userId).then((user, err) => {
+            console.log(post, vote)
             if (err) return res.status(500).send({ message: err });
             const tempVotes = post.votes;
             const userIdVotes = tempVotes.map((vote) => vote.userId);
