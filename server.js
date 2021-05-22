@@ -10,7 +10,7 @@ const { verifyToken } = require("./controllers/authController");
 
 const app = express();
 app.use(express.static(path.join(__dirname, "client/build")));
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 const db = require("./config/database");
