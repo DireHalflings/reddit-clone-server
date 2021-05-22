@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "https://git.heroku.com/reddit-clone-jesus.git";
+const url = "";
 
 export const addPost = async (post) => {
     post.votes = 0;
