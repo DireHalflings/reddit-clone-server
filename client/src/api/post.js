@@ -16,6 +16,12 @@ export const getSubredditPosts = async (sub, token) =>
         headers: { "auth-token": token },
     });
 
+export const postComments = async (post) => {
+    await axios.put(`${url}/posts/comment`, post, {
+        headers: { "auth-token": post.token },
+    });
+};
+
 export const plusVote = async (post) => {
     return await axios.put(`${url}/posts/vote`, post, {
         headers: { "auth-token": post.token },
