@@ -9,8 +9,8 @@ import "./login.css";
 //history.push('/home')
 
 const Login = () => {
-    const [loginEmailInput, setLoginEmailInput] = useState("Sincere@april.biz");
-    const [loginPasswordInput, setLoginPasswordInput] = useState("password1");
+    const [loginEmailInput, setLoginEmailInput] = useState("");
+    const [loginPasswordInput, setLoginPasswordInput] = useState("");
     const [usernameInput, setUsernameInput] = useState("");
 
     const [registerEmailInput, setRegisterEmailInput] = useState("");

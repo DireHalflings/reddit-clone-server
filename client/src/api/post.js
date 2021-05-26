@@ -2,7 +2,7 @@ import axios from "axios";
 const url = "";
 
 export const addPost = async (post) => {
-    post.votes = 0;
+    // post.votes = 0;
     await axios.post(`${url}/posts/add`, post, {
         headers: { "auth-token": post.token },
     });
